@@ -1,42 +1,84 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="style-login.css" />
-<title>Đăng nhập vào trang admincp</title>
-</head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    
+    <!-- Style -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Login</title>
+  </head>
+  <body>
+  
 <?php
-	session_start();
-	include('modules/config.php');
-	if(isset($_POST['login'])){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
-		$sql="select * from admin where username='$username' and password='$password' limit 1 ";
-		$row=mysqli_query($conn,$sql);
-		
-		$count=mysqli_num_rows($row);
-		if($count>0){
-			$_SESSION['dangnhap']=$username;
-			header('location:index.php');
-		}else{
-			
-			echo '<script>alert("Tài khoản hoặc mật khẩu không đúng.Làm ơn đăng nhập lại.");</script>';
-			header('location:login.php');
-		}
+	include '../classes/adminlogin.php';
+
+?>
+<?php
+	$class = new adminlogin();
+	if($_SERVER['REQUEST_METHOD']=='POST'){
+		$adminUser = $_POST['username'];
+		$adminPass = md5($_POST['password']);
+
+		$login_check = $class->login_admin($adminUser,$adminPass);
+
 	}
 ?>
-<body>
-<div id="login">
-	<form action="login.php" method="post" enctype="multipart/form-data">
-    <h2>Đăng nhập</h2>
-    <input type="text" name="username" id="username" placeholder="Enter username..." required="required" />
-     <input type="password" name="password" id="password" placeholder="Enter password..." required="required" />
-      <input type="submit" name="login" id="button" value="Sign in"/>
-    </form>
+  
+  <div class="content">
+    <div class="container">
+      <div class="row">
 
-</div>
-	
+        <div class="col-md-6 contents">
+          <div class="row justify-content-center">
+            <div class="col-md-8">
+              <div class="mb-4">
+              <h3>Admin Login</h3>
+              <span><?php if(isset($login_check)) echo $login_check; ?></span>
+            </div>
+            <form action="login.php" method="post">
+              <div class="form-group first">
+               
+                <input type="text" placeholder="Username" class="form-control" name="username">
 
-</div>
-</body>
+              </div>
+              <div class="form-group last mb-4">
+             
+                <input type="password" placeholder="Password" class="form-control" name="password">
+                
+              </div>
+              
+    
+
+              <input type="submit" value="Log In" class="btn btn-block btn-primary">
+
+        
+              
+             
+            </form>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

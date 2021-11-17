@@ -1,4 +1,5 @@
  <div class="content">
+
     	<div class="box_contains">
         	<?php
 				if(isset($_GET['quanly'])&&$_GET['ac']){
